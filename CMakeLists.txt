@@ -27,21 +27,24 @@ set(SlamLib_INCLUDE_DIR ${catkin_INCLUDE_DIRS} "${CMAKE_CURRENT_SOURCE_DIR}/incl
 # list(APPEND SLAMLIB_INCLUDE_DIR ${catkin_INCLUDE_DIRS})
 message("SlamLib_INCLUDE_DIR: " ${SlamLib_INCLUDE_DIR})
 
+include_directories(
+    ${catkin_INCLUDE_DIRS}
+  )
 
 # GLOB_RECURSE 会递归的找到子目录文件
 # 加了CONFIGURE_DEPENDS，如果有新文件添加，cmake --build 会自动运行 cmake -B build 进行更新
 file(GLOB_RECURSE pointcloud_src CONFIGURE_DEPENDS src/PointCloud/*.cpp) 
 add_library(slam_pointcloud SHARED ${pointcloud_src})
 target_include_directories(slam_pointcloud PUBLIC 
-include
-${PCL_INCLUDE_DIRS}
+    include
+    ${PCL_INCLUDE_DIRS}
 )
 target_link_libraries(slam_pointcloud PUBLIC 
-${PCL_LIBRARIES} 
-${CERES_LIBRARIES}
-/usr/local/lib/libtbb.so
-/usr/local/lib/libtbbmalloc.so
-/usr/local/lib/libtbbmalloc_proxy.so
+    ${PCL_LIBRARIES} 
+    ${CERES_LIBRARIES}
+    /usr/local/lib/libtbb.so
+    /usr/local/lib/libtbbmalloc.so
+    /usr/local/lib/libtbbmalloc_proxy.so
 )
 
 # add_executable(lib_test src/test.cpp)

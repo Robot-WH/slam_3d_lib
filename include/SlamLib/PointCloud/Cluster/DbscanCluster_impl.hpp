@@ -97,7 +97,6 @@ void DBSCANCluster<_PointT>::Extract(
             sq_idx++;
         }
 
-
         // 聚类完成    
         if (seed_queue.size() >= option_.min_pts_per_cluster_) {       
             cluster_indices.push_back(std::move(seed_queue)); 
