@@ -12,6 +12,7 @@ void FilterBase<_PointType>::Filter(const PointCloudConstPtr& cloud_in,
     if (filter_ptr_ == nullptr)
         return; 
     filter_ptr_->setInputCloud(cloud_in);
+    cloud_out.reset(new pcl::PointCloud<_PointType>);
     filter_ptr_->filter(*cloud_out);
     cloud_out->header = cloud_in->header;
     return;  

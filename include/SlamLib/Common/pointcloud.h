@@ -7,11 +7,6 @@
 
 namespace SlamLib {
 
-// using type_id = uint8_t;
-// using PointType = pcl::PointXYZI;
-// using PCLPtr = pcl::PointCloud<PointType>::Ptr;  
-// using PCLType = pcl::PointCloud<PointType>;  
-
 template<typename _T>
 using PCLConstPtr = typename pcl::PointCloud<_T>::ConstPtr;  
 template<typename _T>
