@@ -10,10 +10,8 @@
 #include "FeatureMatch/surfFeatureMatch.hpp"
 #include "SlamLib/Common/color.hpp"
 #include "SlamLib/tic_toc.hpp"
-
 namespace SlamLib { 
 namespace pointcloud {
-
 /**
  * @brief: 基于OptimizeMethod::GN/OptimizeMethod::LM法的边缘/面特征匹配  
  */    

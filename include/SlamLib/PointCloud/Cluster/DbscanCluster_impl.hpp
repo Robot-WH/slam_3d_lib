@@ -1,13 +1,9 @@
-
 #pragma once 
 #include "SlamLib/PointCloud/Cluster/DbscanCluster.h"
-
 namespace SlamLib {
 namespace pointcloud {
-
 template <typename _PointT>
 DBSCANCluster<_PointT>::DBSCANCluster(Option const& option) : option_(option) {}
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * @brief: 提取聚类

@@ -60,19 +60,59 @@ static ndtomp_ptr<_PointType> CreateNDTOMP(float const& ndt_resolution,
     return std::move(ndt_omp); 
 }
 
+/**
+ * @brief PCL库 的 点云匹配算法的包装    
+ * 
+ * @tparam _PointType 
+ */
 template<typename _PointType>
-class NdtOmpRegistration : public RegistrationBase<_PointType> {
+class PCLRegistration : public RegistrationBase<_PointType> {
 public:
     using  RegistrationPtr = std::unique_ptr<pcl::Registration<_PointType, _PointType>>; 
-    NdtOmpRegistration(RegistrationPtr ptr, std::string used_point_label);
+
+    /**
+     * @brief Construct a new PCLRegistration object
+     * 
+     * @param ptr 具体的匹配算法对象
+     * @param used_point_label 当前匹配算法使用的点云标识名称 
+     *                                                            (点云特征可能有很多，每个点云匹配算法可能使用不同的特征)
+     */
+    PCLRegistration(RegistrationPtr ptr, std::string used_point_label);
+
+    /**
+     * @brief Set the Input Source object   
+     *                这里和PCL的设定刚好相反，这里Source表示匹配的点云，Target表示固定的被匹配的点云
+     * FeaturePointCloudContainer格式点云的重载   
+     * @param source_input 
+     */
     virtual void SetInputSource(FeaturePointCloudContainer<_PointType> 
                                                     const& source_input) override;
+    
+    /**
+     * @brief Set the Input Source object
+     *    重载   
+     * @param source_input 
+     */
     virtual void SetInputSource(
         std::pair<std::string, PCLConstPtr<_PointType>> const& source_input) override;
+
+    /**
+     * @brief Set the Input Target object
+     *                这里和PCL的设定刚好相反，这里Source表示匹配的点云，Target表示固定的被匹配的点云
+     * @param target_input 
+     */
     virtual void SetInputTarget(FeaturePointCloudContainer<_PointType> 
                                                     const& target_input) override;
+
+    /**
+     * @brief Set the Input Target object
+     *                匹配目标为Map类型的重载  
+     * @param target_input 
+     */
     virtual void SetInputTarget(
         typename RegistrationBase<_PointType>::MapPtr const& target_input) override;
+
+
     virtual void SetMaxIteration(uint16_t const& n) override;
     virtual void SetNormIteration(uint16_t const& n) override;
     virtual bool Solve(Eigen::Isometry3d &T) override;

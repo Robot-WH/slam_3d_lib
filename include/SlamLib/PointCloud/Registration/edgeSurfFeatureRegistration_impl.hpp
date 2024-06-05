@@ -1,6 +1,5 @@
 #pragma once 
 #include "SlamLib/PointCloud/Registration/edgeSurfFeatureRegistration.h"
-
 namespace SlamLib { 
 namespace pointcloud {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -309,7 +308,7 @@ void EdgeSurfFeatureRegistration<_PointType>::makeHessian(
             // 残差以及其梯度向量  
             Eigen::Vector3d& grad = surf_matched_info_[i].norm_; 
             double& residual = surf_matched_info_[i].residuals_;
-
+            // 注意  扰动的形式是分离的 SO3旋转扰动 + 平移扰动，而非整体的SE3扰动   
             Eigen::Matrix<double, 3, 6> d_P_T;
             // 左乘扰动 
             //d_P_T.block<3, 3>(0, 0) = -math::GetSkewMatrix<double>(q_w_l_ * pointOri);    // 关于旋转
@@ -323,7 +322,8 @@ void EdgeSurfFeatureRegistration<_PointType>::makeHessian(
         }
     ); 
     JTJ = J.transpose() * J;
-    JTR = J.transpose() * R;            
+    JTR = J.transpose() * R;      
+    return;        
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -49,4 +49,4 @@ protected:
     std::unordered_map<std::string, PCLConstPtr<_PointType>> target_features_;  // 匹配目标特征数据
 }; // class LineSurfFeatureRegistration 
 } // namespace
-}
+} // namespace

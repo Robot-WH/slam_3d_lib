@@ -1,24 +1,29 @@
 #include "SlamLib/PointCloud/Filter/filter_base.h"
-
 namespace SlamLib {
 namespace pointcloud {
-
 /**
  * @brief:  滤波流程
  * @param[in] cloud_in 输入的点云 
  * @param[out] cloud_out 处理后的点云 
  */        
 template<typename _PointType>
-typename FilterBase<_PointType>::PointCloudPtr 
-FilterBase<_PointType>::Filter(const PointCloudConstPtr& cloud_in) const {
-    PointCloudPtr cloud_out(
-        new pcl::PointCloud<_PointType>(*cloud_in));  
+void FilterBase<_PointType>::Filter(const PointCloudConstPtr& cloud_in, 
+                                                                            PointCloudPtr& cloud_out) const {
     if (filter_ptr_ == nullptr)
-        return cloud_out; 
+        return; 
     filter_ptr_->setInputCloud(cloud_in);
     filter_ptr_->filter(*cloud_out);
     cloud_out->header = cloud_in->header;
-    return cloud_out;  
+    return;  
+}
+
+template<typename _PointType>
+void FilterBase<_PointType>::Filter(PointCloudPtr& cloud_in) const {
+    if (filter_ptr_ == nullptr)
+        return; 
+    filter_ptr_->setInputCloud(cloud_in);
+    filter_ptr_->filter(*cloud_in);
+    return;  
 }
 
 /**

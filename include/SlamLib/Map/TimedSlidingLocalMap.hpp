@@ -136,6 +136,37 @@ public:
         return true;  
     } 
 
+    /**
+     * @brief 修改滑动窗口地图中，标识为name的滑窗地图的第n个点云数据
+     *                  
+     * @param name 
+     * @param n 
+     * @param frame 新的数据
+     */
+    virtual void AmendData(std::string const& name, int const& n,
+            typename pcl::PointCloud<_PointType>::ConstPtr frame) override {
+        if (frame->empty()) return;  
+        std::lock_guard<std::mutex> lock(this->local_map_mt_);
+        if (local_map_frame_container_.find(name) == local_map_frame_container_.end()) {
+            return;
+        }
+        auto& frame_queue_ = local_map_frame_container_[name];
+        // frame_queue_[n] = frame;
+    }
+
+    /**
+     * @brief 获取当前标识为name的特征的滑窗大小
+     * 
+     * @param name 
+     * @return int 
+     */
+    virtual int GetWindowSize(std::string const& name) const override {
+        if (local_map_frame_container_.find(name) == local_map_frame_container_.end()) {
+            return -1;
+        }
+        return local_map_frame_container_.at(name).size();
+    }
+
 private:
     Option option_; 
     std::unordered_map<std::string, KdtreePtr> kdtree_container_;  

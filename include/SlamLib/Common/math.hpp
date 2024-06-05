@@ -26,7 +26,7 @@ static Eigen::Matrix<T, 3, 3> GetSkewMatrix(const Eigen::Matrix<T, 3, 1>& v) {
 }
 
 // 李代数转四元数 + XYZ 
-static void GetTransformFromSe3(const Eigen::Matrix<double,6,1>& se3, 
+static void GetTransformFromSE3(const Eigen::Matrix<double,6,1>& se3, 
                                                                         Eigen::Quaterniond& q, Eigen::Vector3d& t) {
     Eigen::Vector3d omega(se3.data());
     Eigen::Vector3d upsilon(se3.data()+3);

@@ -39,10 +39,17 @@ public:
         if( jacobians != nullptr ) {   
             // 注意这里的jacobian 在维度上是  error 关于 李群的， 但是其实 是求关于李代数的jacobian
             if( jacobians[0] != nullptr ) {
-                // 残差关于李群的jacobian
+                // 残差关于李群的jacobian        
                 Eigen::Matrix<double, 3, 6> dp_by_se3;
+                //  左乘扰动 
                 dp_by_se3.block<3,3>(0,0) = -math::GetSkewMatrix(target_point_after_trans);     // 关于旋转
-                (dp_by_se3.block<3,3>(0, 3)).setIdentity();
+                dp_by_se3.block<3,3>(0, 3).setIdentity();
+
+                // 右乘扰动 
+                // dp_by_se3.block<3,3>(0,0) = -q_source_curr.toRotationMatrix() 
+                //                                                     * math::GetSkewMatrix<double>(curr_point_);     // 关于旋转
+                // dp_by_se3.block<3,3>(0, 3) = q_source_curr.toRotationMatrix();
+
                 Eigen::Map<Eigen::Matrix<double, 1, 7, Eigen::RowMajor> > J_se3(jacobians[0]);
                 J_se3.setZero();
                 J_se3.block<1,6>(0,0) = plane_unit_norm_.transpose() * dp_by_se3;

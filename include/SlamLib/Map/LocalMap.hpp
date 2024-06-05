@@ -8,14 +8,11 @@
  * 
  */
 #pragma once
-
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include <mutex>
-
 namespace SlamLib {
 namespace map {
-
 /**
  * @brief:  基于 地图点数据的 localmap  
  * @details:  不只是一种local map，而是多个local map的容器 
@@ -46,6 +43,15 @@ public:
         
     virtual bool GetNearlyNeighbor(std::string const& name, _PointType const& point, 
         uint16_t const& num, double const& max_range, PointVector& res) const = 0;   // 搜索邻居  
+
+    virtual void AmendData(std::string const& name, int const& n,
+            typename pcl::PointCloud<_PointType>::ConstPtr frame) {};
+    
+    virtual int GetWindowSize(std::string const& name) const {return -1;}
+
+    virtual void Reset() {
+        local_map_container_.clear();  
+    }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /**

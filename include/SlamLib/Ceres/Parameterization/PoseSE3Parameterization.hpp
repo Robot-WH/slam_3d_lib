@@ -29,17 +29,22 @@ public:
      * @return {*}
      */            
     virtual bool Plus(const double* x, const double* delta, double* x_plus_delta) const {
+        // w<-curr
         Eigen::Map<const Eigen::Vector3d> trans(x + 4);
         Eigen::Map<const Eigen::Quaterniond> quater(x);
         Eigen::Quaterniond delta_q;
         Eigen::Vector3d delta_t;
         // se3 转 平移和旋转SO3  
-        math::GetTransformFromSe3(Eigen::Map<const Eigen::Matrix<double,6,1>>(delta), 
+        math::GetTransformFromSE3(Eigen::Map<const Eigen::Matrix<double,6,1>>(delta), 
                                                             delta_q, delta_t);
         Eigen::Map<Eigen::Quaterniond> quater_plus(x_plus_delta);
         Eigen::Map<Eigen::Vector3d> trans_plus(x_plus_delta + 4);
+        // 左乘更新
         quater_plus = delta_q * quater;
         trans_plus = delta_q * trans + delta_t;
+        // 右乘更新  
+        // trans_plus = quater * delta_t + trans;
+        // quater_plus =  quater * delta_q;
         return true;
     }
     /**

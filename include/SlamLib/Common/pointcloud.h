@@ -20,6 +20,10 @@ using PCLPtr = typename pcl::PointCloud<_T>::Ptr;
 
 template<typename _PointType>
 using FeaturePointCloudContainer = std::unordered_map<std::string, 
+        typename pcl::PointCloud<_PointType>::Ptr>;
+
+template<typename _PointType>
+using ConstFeaturePointCloudContainer = std::unordered_map<std::string, 
         typename pcl::PointCloud<_PointType>::ConstPtr>;
 
 /**

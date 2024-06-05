@@ -1,10 +1,7 @@
-
 #pragma once 
-
 #include "FeatureMatchBase.hpp"
 namespace SlamLib {
 namespace pointcloud {
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename _PointT>
 class SurfFeatureMatch : public FeatureMatch<_PointT> {

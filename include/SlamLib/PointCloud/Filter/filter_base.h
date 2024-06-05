@@ -1,11 +1,9 @@
-
 #pragma once 
 #define PCL_NO_PRECOMPILE
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include <pcl/filters/filter.h>
 #include "SlamLib/Common/point_type.h"
-
 namespace SlamLib {
 namespace pointcloud {
 /**
@@ -19,7 +17,8 @@ public:
 
     FilterBase() : filter_ptr_(nullptr) {}
     virtual ~FilterBase() {}
-    virtual PointCloudPtr Filter(const PointCloudConstPtr& cloud_in) const;
+    virtual void Filter(const PointCloudConstPtr& cloud_in, PointCloudPtr& cloud_out) const;
+    virtual void Filter(PointCloudPtr& cloud_in) const; 
     void SetFilter(typename pcl::Filter<_PointType>::Ptr const& filter_ptr);
     
 private:

@@ -14,7 +14,7 @@ namespace SlamLib {
 namespace pointcloud {
 
 template<typename _PointType>
-OutlierRemovalFilter<_PointType>::OutlierRemovalFilter(Option option) {
+OutlierRemovalFilter<_PointType>::OutlierRemovalFilter(FilterOption::OutlierRemovalFilterOption option) {
     Reset(option);
 }
 
@@ -24,7 +24,7 @@ OutlierRemovalFilter<_PointType>::OutlierRemovalFilter(Option option) {
  * @param option 
  */
 template<typename _PointType>
-void OutlierRemovalFilter<_PointType>::Reset(Option option) {
+void OutlierRemovalFilter<_PointType>::Reset(FilterOption::OutlierRemovalFilterOption option) {
     if (option.mode_ == "radiusOutlier") {
         RadiusOutlierRemovalPtr<_PointType> rad(new pcl::RadiusOutlierRemoval<_PointType>());
         rad->setRadiusSearch(option.radiusOutlier_option_.radius_);                                         

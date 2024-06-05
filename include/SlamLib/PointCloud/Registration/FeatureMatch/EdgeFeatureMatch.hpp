@@ -5,15 +5,11 @@
  * @version 1.0
  * 
  * @copyright Copyright (c) 2022
- * 
  */
 #pragma once 
-
 #include "FeatureMatchBase.hpp"
-
 namespace SlamLib {
 namespace pointcloud {
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename _PointT>
 class EdgeFeatureMatch : public FeatureMatch<_PointT> {
@@ -35,7 +31,7 @@ public:
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     bool Match(_PointT const& point, EdgeCostFactorInfo &res) {
-        if (!base::SearchKNN(point, 5, base::search_thresh_, res.matched_points_)) return false;   
+        if (!this->SearchKNN(point, 5, base::search_thresh_, res.matched_points_)) return false;   
         // 进行PCA
         std::vector<Eigen::Vector3d> nearCorners;
         Eigen::Vector3d center(0, 0, 0);

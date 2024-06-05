@@ -5,7 +5,7 @@ namespace SlamLib {
 namespace pointcloud {
 
 template<typename _PointType>
-VoxelGridFilter<_PointType>::VoxelGridFilter(Option option) {
+VoxelGridFilter<_PointType>::VoxelGridFilter(FilterOption::VoxelGridFilterOption option) {
     Reset(option); 
 }
 
@@ -15,7 +15,7 @@ VoxelGridFilter<_PointType>::VoxelGridFilter(Option option) {
  * @return {*}
  */            
 template<typename _PointType>
-void VoxelGridFilter<_PointType>::Reset(Option option) {
+void VoxelGridFilter<_PointType>::Reset(FilterOption::VoxelGridFilterOption option) {
     if (option.mode_ == "VoxelGrid") {
         // 用体素内点云的重心代替原点云   
         VoxelGridPtr<_PointType> voxelgrid(new pcl::VoxelGrid<_PointType>());

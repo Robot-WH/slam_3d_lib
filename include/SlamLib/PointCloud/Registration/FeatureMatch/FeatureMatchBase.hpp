@@ -15,10 +15,8 @@
 #include <pcl/common/transforms.h>
 #include <eigen3/Eigen/Dense>
 #include "SlamLib/Map/LocalMap.hpp"
-
 namespace SlamLib {
 namespace pointcloud {
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * @brief: 匹配器  两种匹配目标   1、与点云匹配    2、与local map进行匹配   
@@ -85,10 +83,15 @@ public:
             search_tree_->nearestKSearch(point, num, pointSearchInd, pointSearchSqDis); 
             double sq_max_range = max_range * max_range;
             res.clear();
+
             for (uint16_t i = 0; i < pointSearchInd.size(); i++) {
-                if (pointSearchSqDis[i] > sq_max_range) break; 
+                if (pointSearchSqDis[i] > sq_max_range) {
+                    break; 
+                }
+
                 res.emplace_back(target_points_->points[pointSearchInd[i]]);
             }
+
             return (res.size() == num);     
         }
         return false; 
