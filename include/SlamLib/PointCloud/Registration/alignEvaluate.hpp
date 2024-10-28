@@ -67,7 +67,6 @@ public:
         }
         // 计算好点的占比   
         overlap_ratio_ = (double)nr / input_transformed.points.size();
-        std::cout << "overlap_ratio_: " << overlap_ratio_ << std::endl;
         // 如果内点数量不足        
         if (overlap_ratio_ > inlier_ratio_thresh) {
             return std::pair<double, double>(std::sqrt(fitness_score / nr), overlap_ratio_);          // 距离合适的点的平均距离   

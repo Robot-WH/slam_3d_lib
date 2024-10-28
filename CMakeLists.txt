@@ -20,15 +20,12 @@ if (OPENMP_FOUND)
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 endif()
 
-find_package(catkin REQUIRED COMPONENTS ndt_omp)
-
-set(SlamLib_INCLUDE_DIR ${catkin_INCLUDE_DIRS} "${CMAKE_CURRENT_SOURCE_DIR}/include" CACHE PATH 
+set(Slamlib_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include" CACHE PATH 
     "project include location" FORCE)
-# list(APPEND SLAMLIB_INCLUDE_DIR ${catkin_INCLUDE_DIRS})
-message("SlamLib_INCLUDE_DIR: " ${SlamLib_INCLUDE_DIR})
+# message("SlamLib_INCLUDE_DIR: " ${SlamLib_INCLUDE_DIR})
 
 include_directories(
-    ${catkin_INCLUDE_DIRS}
+    ${NDT_OMP_INCLUDE_DIR}
   )
 
 # GLOB_RECURSE 会递归的找到子目录文件
@@ -43,17 +40,8 @@ target_include_directories(slam_pointcloud PUBLIC
 target_link_libraries(slam_pointcloud PUBLIC 
     ${PCL_LIBRARIES} 
     ${CERES_LIBRARIES}
-    ${CATKIN_LIBRARIES}
     ndt_omp
     /usr/local/lib/libtbb.so
     /usr/local/lib/libtbbmalloc.so
     /usr/local/lib/libtbbmalloc_proxy.so
 )
-
-# add_executable(lib_test src/test.cpp)
-# target_include_directories(slam_pointcloud PUBLIC 
-# include
-# )
-# target_link_libraries(lib_test
-# slam_pointcloud
-# )

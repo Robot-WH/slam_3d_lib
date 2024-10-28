@@ -26,7 +26,7 @@ void FilterBase<_PointType>::Filter(PointCloudPtr& cloud_in) const {
     filter_ptr_->filter(*cloud_in);
     return;  
 }
-
+    
 /**
  * @brief: 设置滤波器   通过这个就能更换滤波器
  */        
