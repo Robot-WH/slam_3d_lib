@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.10)
 project(slam_lib_3d)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -10,7 +10,6 @@ find_package(Ceres REQUIRED)
 find_package(PCL 1.7 REQUIRED)
 find_package(Eigen3  REQUIRED)
 find_package(OpenCV 3.0 QUIET)
-find_package(GTSAM REQUIRED QUIET)
 find_package(glog  REQUIRED)
 find_package(Boost REQUIRED COMPONENTS timer)
 
@@ -20,25 +19,76 @@ if (OPENMP_FOUND)
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 endif()
 
-set(Slamlib_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include" CACHE PATH 
-    "project include location" FORCE)
-# message("SlamLib_INCLUDE_DIR: " ${SlamLib_INCLUDE_DIR})
+add_subdirectory(thirdpart/ndt_omp)
 
-# GLOB_RECURSE 会递归的找到子目录文件
-# 加了CONFIGURE_DEPENDS，如果有新文件添加，cmake --build 会自动运行 cmake -B build 进行更新
 file(GLOB_RECURSE pointcloud_src CONFIGURE_DEPENDS src/PointCloud/*.cpp) 
 
-add_library(slam_pointcloud SHARED ${pointcloud_src})
-target_include_directories(slam_pointcloud PUBLIC 
-    include
-    ${PCL_INCLUDE_DIRS}
-    ${NDT_OMP_INCLUDE_DIR}
-)
-target_link_libraries(slam_pointcloud PUBLIC 
-    ${PCL_LIBRARIES} 
-    ${CERES_LIBRARIES}
-    ndt_omp
-    /usr/local/lib/libtbb.so
-    /usr/local/lib/libtbbmalloc.so
-    /usr/local/lib/libtbbmalloc_proxy.so
-)
+if($ENV{ROS_VERSION} EQUAL 1)
+    add_library(slam_pointcloud SHARED ${pointcloud_src})
+    target_include_directories(slam_pointcloud PUBLIC 
+        include
+        ${PCL_INCLUDE_DIRS}
+    )
+
+    target_link_libraries(slam_pointcloud PUBLIC 
+        ${PCL_LIBRARIES} 
+        ${CERES_LIBRARIES}
+        /usr/local/lib/libtbb.so
+        /usr/local/lib/libtbbmalloc.so
+        /usr/local/lib/libtbbmalloc_proxy.so
+        ndt_omp
+    )
+
+    install(
+        DIRECTORY include/
+        DESTINATION include
+    )
+
+    # 注册 导出库文件
+    install(
+        TARGETS slam_pointcloud # 告诉ros2有这么个目标（可执行文件或者库）
+        EXPORT slam_pointcloud
+        ARCHIVE DESTINATION lib
+        LIBRARY DESTINATION lib
+        RUNTIME DESTINATION bin
+        INCLUDES DESTINATION include
+    )
+else()
+    find_package(TBB REQUIRED)
+    # find_package(ament_cmake REQUIRED)
+    add_library(slam_pointcloud SHARED ${pointcloud_src})
+    target_include_directories(slam_pointcloud PUBLIC 
+        include
+        ${PCL_INCLUDE_DIRS}
+        ${NDT_OMP_INCLUDE_DIR}
+    )
+    # message(FATAL_ERROR "NDT_OMP_INCLUDE_DIR: " ${NDT_OMP_INCLUDE_DIR})
+    # ament_target_dependencies(slam_pointcloud PUBLIC ndt_omp)
+    target_link_libraries(slam_pointcloud PUBLIC 
+        ${PCL_LIBRARIES} 
+        ${CERES_LIBRARIES}
+        ${TBB_LIBRARIES}
+        ndt_omp
+    )
+
+    install(
+        DIRECTORY include/
+        DESTINATION include
+    )
+
+    # 注册 导出库文件
+    install(
+        TARGETS slam_pointcloud # 告诉ros2有这么个目标（可执行文件或者库）
+        EXPORT slam_pointcloud
+        ARCHIVE DESTINATION lib
+        LIBRARY DESTINATION lib
+        RUNTIME DESTINATION bin
+        INCLUDES DESTINATION include
+    )
+    # # 这里的include是Install下的include  
+    # ament_export_include_directories(include ${NDT_OMP_INCLUDE_DIR})   
+    # ament_export_libraries(slam_pointcloud)  
+    # # ament_export_dependencies(
+    # # )
+    # ament_package()
+endif()

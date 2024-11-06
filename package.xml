@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>slam_lib_3d</name>
+  <version>0.0.0</version>
+  <description>slam lib on outdoor robot</description>
+
+  <maintainer email="wiwlwh@163.com">koide</maintainer>
+
+  <license>BSD</license>
+
+  <buildtool_depend condition="$ROS_VERSION == 1">catkin</buildtool_depend>
+  <buildtool_depend condition="$ROS_VERSION == 2">ament_cmake</buildtool_depend>
+
+  <build_depend>ndt_omp</build_depend>
+  <export>
+    <build_type condition="$ROS_VERSION == 1">catkin</build_type>
+    <build_type condition="$ROS_VERSION == 2">ament_cmake</build_type>
+  </export>
+</package>
